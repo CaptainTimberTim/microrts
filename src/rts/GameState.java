@@ -221,20 +221,12 @@ public class GameState {
     /**
      * Issues a player action
      * @param pa
-     * @return "true" is any action different from NONE was issued
+     * @return "true" if any action different from NONE was issued
      */
     public boolean issue(PlayerAction pa) {
         boolean returnValue = false;
         
         for(Pair<Unit,UnitAction> p:pa.actions) {
-//            if (p.m_a==null) {
-//                System.err.println("Issuing an action to a null unit!!!");
-//                System.exit(1);
-//            }
-//            if (unitActions.get(p.m_a)!=null) {
-//                System.err.println("Issuing an action to a unit with another action!");
-//            } else 
-//            {
                 // check for conflicts:
                 ResourceUsage ru = p.m_b.resourceUsage(p.m_a, pgs);
                 for(UnitActionAssignment uaa:unitActions.values()) {
@@ -530,18 +522,18 @@ public class GameState {
         
         List<UnitActionAssignment> readyToExecute = new LinkedList<UnitActionAssignment>();
         for(UnitActionAssignment uaa:unitActions.values()) {
-            if (uaa.action.ETA(uaa.unit)+uaa.time<=time) readyToExecute.add(uaa);
+            int tmp = uaa.action.ETA(uaa.unit);
+            if (tmp+uaa.time<=time) 
+            {
+                readyToExecute.add(uaa);
+            }
         }
                 
         // execute the actions:
         for(UnitActionAssignment uaa:readyToExecute) {
-            unitActions.remove(uaa.unit);
-            
-//            System.out.println("Executing action for " + u + " issued at time " + uaa.time + " with duration " + uaa.action.ETA(uaa.unit));
-            
+            unitActions.remove(uaa.unit);            
             uaa.action.execute(uaa.unit,this);
-        }
-        
+        }        
         return gameover();
     }
     

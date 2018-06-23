@@ -51,6 +51,7 @@ public class AgentSmith extends AIWithComputationBudget implements Interruptible
     int MAXSIMULATIONTIME    = 1024;
     
     EvaluationFunction EvalFunc = null;
+    PlayerAction BestMove = null;
     
     public AgentSmith(UnitTypeTable utt) 
     {
@@ -91,12 +92,9 @@ public class AgentSmith extends AIWithComputationBudget implements Interruptible
         {
             startNewComputation(player,gs.clone());
             computeDuringOneGameFrame();
-            return getBestActionSoFar();
-        } 
-        else 
-        {
-            return new PlayerAction();        
+            if(BestMove != null) return BestMove;
         }
+        return new PlayerAction();        
     }
 
     @Override
@@ -151,8 +149,53 @@ public class AgentSmith extends AIWithComputationBudget implements Interruptible
         }
         TotalActionsIssued++;
         return BestAction.PA;
-    }    
+    }
+    
+    @Override
+    public void computeDuringOneGameFrame() throws Exception 
+    {
+        long StartTime    = System.currentTimeMillis();
+        long CutOffTime   = (TIME_BUDGET > 0) ? (StartTime + TIME_BUDGET/10) : (0);
+        BestMove = greedyActionScan(StartingGameState, PlayerForThisComputation, CutOffTime);
+    }
+    
+    public PlayerAction greedyActionScan(GameState gs, int player, long cutOffTime) throws Exception {
+        PlayerAction best = null;
+        float bestScore = 0;
+        PlayerActionGenerator pag = new PlayerActionGenerator(gs,player);
+        PlayerAction pa = null;
 
+        System.out.println("\n\n");
+        long GreedCycles = 0;
+        long StartMillis = System.currentTimeMillis();
+        do{
+            GreedCycles++;
+            pa = pag.getNextAction(cutOffTime);
+            if (pa!=null) 
+            {
+                GameState gs2 = gs.cloneIssue(pa);
+                gs2.issue(pa);
+                float score = EvalFunc.evaluate(player, 1 - player, gs2);
+                float score2 = EvalFunc.evaluate(player, 1 - player, gs);
+                System.out.println(pa.toString()+"\n******** Score: "+score);
+                if (best==null || score>bestScore) 
+                {
+                    System.out.println("NEW BEST: "+GreedCycles+"!!!!");
+                    best = pa;
+                    bestScore = score; 
+                }                
+            }
+            if (System.currentTimeMillis()>cutOffTime)
+            {
+                System.out.println("EarlyBreak");
+                break;
+            }
+        }while(pa!=null);
+                    
+        System.out.println("\nGreedy: "+ GreedCycles + ", Time: "+ (System.currentTimeMillis()-StartMillis)+"ms");
+        return best;
+    }
+/*
     @Override
     public void computeDuringOneGameFrame() throws Exception
     {
@@ -228,7 +271,7 @@ public class AgentSmith extends AIWithComputationBudget implements Interruptible
         System.out.println("CarloRuns: " + PerCycleLoopCount + "; ~TestLoops: " + (PerCarloLoopCount/PerCycleLoopCount));
         TotalCyclesExecuted++;
     }
-    
+    */
     int PerCarloLoopCount = 0;
     int PerCycleLoopCount = 0;
     
@@ -262,6 +305,6 @@ public class AgentSmith extends AIWithComputationBudget implements Interruptible
         Entry.VisitedCount++;
         
         Run++;
-        TotalRuns++;        
+        TotalRuns++;
     }       
 }

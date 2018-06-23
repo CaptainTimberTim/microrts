@@ -19,13 +19,15 @@ public class AgentEvaluationFunction extends EvaluationFunction
     static float ResourceMultiplier          = 20.0f;
     static float ResourcesInWorkerMultiplier = 10.0f;
     static float UnitHPMultiplier            = 40.0f;
-    static float DistanceMultiplier          = 1000.0f;
+    static float DistanceMultiplier          = 10000.0f;
     
     @Override
     public float evaluate(int MaxPlayer, int MinPlayer, GameState GS) 
     {
         float Result = 0.0f;
         float Score1 = CalculateScore(MaxPlayer, GS);
+        return Score1;
+        /*
         float Score2 = CalculateScore(MinPlayer, GS);
         if(Score1 + Score2 == 0.0f)
         {
@@ -35,12 +37,12 @@ public class AgentEvaluationFunction extends EvaluationFunction
         {
             Result = (2*Score1/(Score1 + Score2)) - 1;
         }
-        return Result;
+        return Score1;//Result;*/
     }
     
     private float CalculateScore(int Player, GameState GS)
     {
-        float Result = GS.getPlayer(Player).getResources()*ResourceMultiplier;
+        float Result = 0;//GS.getPlayer(Player).getResources()*ResourceMultiplier;
         PhysicalGameState PhysicalGS = GS.getPhysicalGameState();
         boolean AnyUnit = false;
         for(Unit U : PhysicalGS.getUnits())
@@ -55,15 +57,18 @@ public class AgentEvaluationFunction extends EvaluationFunction
                     {
                         if(U2.getPlayer() != Player)
                         {
-                            Result += 1/Math.abs(Pos - U2.getPosition(PhysicalGS)) * DistanceMultiplier;
+                            float Dist = 1.0f/(float)Math.abs(Pos - U2.getPosition(PhysicalGS)) * DistanceMultiplier;
+                            Result += Dist;
+                            System.out.print("POS: "+Pos+", ");
                         }
                     }
                 }
-                Result += U.getResources()*ResourcesInWorkerMultiplier;
-                Result += U.getCost()*Math.sqrt(U.getHitPoints()/U.getMaxHitPoints())*UnitHPMultiplier;
+                //Result += U.getResources()*ResourcesInWorkerMultiplier;
+                //Result += U.getCost()*Math.sqrt(U.getHitPoints()/U.getMaxHitPoints())*UnitHPMultiplier;
             }            
         }        
         if(!AnyUnit) Result = 0.0f;
+        System.out.print("\n**********\n");
         return Result;
     }
 

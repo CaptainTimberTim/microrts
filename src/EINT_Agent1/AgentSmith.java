@@ -5,6 +5,7 @@
  */
 package EINT_Agent1;
 
+import static EINT_Agent1.AgentEvaluationFunction.DistanceMultiplier;
 import ai.RandomBiasedAI;
 import ai.abstraction.WorkerRush;
 import ai.core.AI;
@@ -18,7 +19,10 @@ import java.util.Random;
 import rts.GameState;
 import rts.PlayerAction;
 import rts.PlayerActionGenerator;
+import rts.UnitAction;
+import rts.units.Unit;
 import rts.units.UnitTypeTable;
+import util.Pair;
 
 /**
  *
@@ -165,14 +169,17 @@ public class AgentSmith extends AIWithComputationBudget implements Interruptible
         PlayerActionGenerator pag = new PlayerActionGenerator(gs,player);
         PlayerAction pa = null;
 
-        System.out.println("\n\n");
+        System.out.println("\n\n ------------------------------------");
         long GreedCycles = 0;
         long StartMillis = System.currentTimeMillis();
+        
         do{
             GreedCycles++;
             pa = pag.getNextAction(cutOffTime);
+            
             if (pa!=null) 
             {
+<<<<<<< HEAD
                 GameState gs2 = gs.cloneIssue(pa);
                 for(int i = 0; i < 10; ++i)
                 {
@@ -183,6 +190,18 @@ public class AgentSmith extends AIWithComputationBudget implements Interruptible
                 System.out.println(pa.toString()+"\n********");
                 float score = EvalFunc.evaluate(player, 1 - player, gs2);
                 float score2 = EvalFunc.evaluate(player, 1 - player, gs);
+=======
+                GameState gs2 = gs.clone();
+                
+                for(Pair<Unit,UnitAction> p : pa.getActions()) {
+                    p.m_b.execute(gs2.getUnit(p.m_a.getID()), gs2);
+                }
+                
+                float score = EvalFunc.evaluate(player, 1 - player, gs2);
+                
+                System.out.println(pa.toString()+"\nScore: "+score);
+                
+>>>>>>> 1d2aed8fa6629aa2dda26bfdca13e19a4a31fcf1
                 if (best==null || score>bestScore) 
                 {
                     System.out.println("NEW BEST: "+GreedCycles+"!!!!");
@@ -197,9 +216,12 @@ public class AgentSmith extends AIWithComputationBudget implements Interruptible
             }
         }while(pa!=null);
                     
-        System.out.println("\nGreedy: "+ GreedCycles + ", Time: "+ (System.currentTimeMillis()-StartMillis)+"ms");
+        System.out.println("Greedy: "+ GreedCycles + ", Time: "+ (System.currentTimeMillis()-StartMillis)+"ms");
+        System.out.println("\n\n ------------------------------------");
         return best;
     }
+    
+
 /*
     @Override
     public void computeDuringOneGameFrame() throws Exception

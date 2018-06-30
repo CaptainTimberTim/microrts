@@ -3,12 +3,23 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+<<<<<<< HEAD
             <file>file:/F:/Textdateien/Hochschulkram/Master/EINT/SourceTree/src/EINT_Agent1/AgentEvaluationFunction.java</file>
             <file>file:/F:/Textdateien/Hochschulkram/Master/EINT/SourceTree/src/ai/montecarlo/MonteCarlo.java</file>
             <file>file:/F:/Textdateien/Hochschulkram/Master/EINT/SourceTree/src/EINT_Agent1/AgentSmith.java</file>
             <file>file:/F:/Textdateien/Hochschulkram/Master/EINT/SourceTree/src/rts/ResourceUsage.java</file>
             <file>file:/F:/Textdateien/Hochschulkram/Master/EINT/SourceTree/src/tests/GameVisualSimulationTest.java</file>
             <file>file:/F:/Textdateien/Hochschulkram/Master/EINT/SourceTree/src/rts/GameState.java</file>
+=======
+            <file>file:/E:/Franzi/Documents/Studium/Master/3.Semester/EntwicklungIntelligenterSysteme/MicroRTSProject/src/rts/UnitAction.java</file>
+            <file>file:/E:/Franzi/Documents/Studium/Master/3.Semester/EntwicklungIntelligenterSysteme/MicroRTSProject/src/EINT_Agent1/AgentSmith.java</file>
+            <file>file:/E:/Franzi/Documents/Studium/Master/3.Semester/EntwicklungIntelligenterSysteme/MicroRTSProject/src/ai/mcts/MCTSNode.java</file>
+            <file>file:/E:/Franzi/Documents/Studium/Master/3.Semester/EntwicklungIntelligenterSysteme/MicroRTSProject/src/ai/montecarlo/MonteCarlo.java</file>
+            <file>file:/E:/Franzi/Documents/Studium/Master/3.Semester/EntwicklungIntelligenterSysteme/MicroRTSProject/src/EINT_Agent1/AgentEvaluationFunction.java</file>
+            <file>file:/E:/Franzi/Documents/Studium/Master/3.Semester/EntwicklungIntelligenterSysteme/MicroRTSProject/src/tests/GameVisualSimulationTest.java</file>
+            <file>file:/E:/Franzi/Documents/Studium/Master/3.Semester/EntwicklungIntelligenterSysteme/MicroRTSProject/src/ai/minimax/ABCD/IDABCD.java</file>
+            <file>file:/E:/Franzi/Documents/Studium/Master/3.Semester/EntwicklungIntelligenterSysteme/MicroRTSProject/src/rts/PlayerAction.java</file>
+>>>>>>> 1d2aed8fa6629aa2dda26bfdca13e19a4a31fcf1
         </group>
     </open-files>
 </project-private>

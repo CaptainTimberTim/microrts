@@ -174,10 +174,15 @@ public class AgentSmith extends AIWithComputationBudget implements Interruptible
             if (pa!=null) 
             {
                 GameState gs2 = gs.cloneIssue(pa);
-                gs2.issue(pa);
+                for(int i = 0; i < 10; ++i)
+                {
+                    System.out.println(gs2.isComplete());
+                    //if(gs2.isComplete())
+                        gs2.cycle();
+                }
+                System.out.println(pa.toString()+"\n********");
                 float score = EvalFunc.evaluate(player, 1 - player, gs2);
                 float score2 = EvalFunc.evaluate(player, 1 - player, gs);
-                System.out.println(pa.toString()+"\n******** Score: "+score);
                 if (best==null || score>bestScore) 
                 {
                     System.out.println("NEW BEST: "+GreedCycles+"!!!!");

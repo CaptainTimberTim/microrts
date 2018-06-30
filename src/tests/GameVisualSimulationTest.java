@@ -45,7 +45,7 @@ public class GameVisualSimulationTest {
         
         AI ai1 = new AgentSmith(utt);
         //AI ai2 = new IDRTMinimax(100, new SimpleSqrtEvaluationFunction2());
-        AI ai2 = new NaiveMCTS(utt);
+        AI ai2 = new MonteCarlo(utt);
 
         JFrame w = PhysicalGameStatePanel.newVisualizer(gs,640,640,false,PhysicalGameStatePanel.COLORSCHEME_BLACK);
 //        JFrame w = PhysicalGameStatePanel.newVisualizer(gs,640,640,false,PhysicalGameStatePanel.COLORSCHEME_WHITE);

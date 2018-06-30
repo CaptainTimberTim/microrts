@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import rts.GameState;
+import rts.PhysicalGameState;
 import rts.PlayerAction;
 import rts.PlayerActionGenerator;
 import rts.UnitAction;
@@ -159,7 +160,7 @@ public class AgentSmith extends AIWithComputationBudget implements Interruptible
     public void computeDuringOneGameFrame() throws Exception 
     {
         long StartTime    = System.currentTimeMillis();
-        long CutOffTime   = (TIME_BUDGET > 0) ? (StartTime + TIME_BUDGET/10) : (0);
+        long CutOffTime   = (TIME_BUDGET > 0) ? (StartTime + TIME_BUDGET) : (0);
         BestMove = greedyActionScan(StartingGameState, PlayerForThisComputation, CutOffTime);
     }
     
@@ -172,25 +173,14 @@ public class AgentSmith extends AIWithComputationBudget implements Interruptible
         System.out.println("\n\n ------------------------------------");
         long GreedCycles = 0;
         long StartMillis = System.currentTimeMillis();
-        
+        PhysicalGameState PGS = gs.getPhysicalGameState();
+        System.out.println("PGS: h: "+PGS.getHeight()+", w: "+PGS.getWidth());
         do{
             GreedCycles++;
             pa = pag.getNextAction(cutOffTime);
             
             if (pa!=null) 
             {
-<<<<<<< HEAD
-                GameState gs2 = gs.cloneIssue(pa);
-                for(int i = 0; i < 10; ++i)
-                {
-                    System.out.println(gs2.isComplete());
-                    //if(gs2.isComplete())
-                        gs2.cycle();
-                }
-                System.out.println(pa.toString()+"\n********");
-                float score = EvalFunc.evaluate(player, 1 - player, gs2);
-                float score2 = EvalFunc.evaluate(player, 1 - player, gs);
-=======
                 GameState gs2 = gs.clone();
                 
                 for(Pair<Unit,UnitAction> p : pa.getActions()) {
@@ -201,10 +191,9 @@ public class AgentSmith extends AIWithComputationBudget implements Interruptible
                 
                 System.out.println(pa.toString()+"\nScore: "+score);
                 
->>>>>>> 1d2aed8fa6629aa2dda26bfdca13e19a4a31fcf1
                 if (best==null || score>bestScore) 
                 {
-                    System.out.println("NEW BEST: "+GreedCycles+"!!!!");
+                    System.out.println("******> NEW BEST: "+GreedCycles+"!!!! <********");
                     best = pa;
                     bestScore = score; 
                 }                

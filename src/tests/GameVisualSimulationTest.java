@@ -4,36 +4,25 @@
  */
 package tests;
 
+import javafx.application.Application;
 import EINT_Agent1.AgentSmith;
 import ai.core.AI;
 import ai.*;
-import ai.abstraction.*;
-import ai.abstraction.pathfinding.BFSPathFinding;
-import ai.evaluation.SimpleEvaluationFunction;
-import ai.evaluation.SimpleOptEvaluationFunction;
-import ai.evaluation.SimpleSqrtEvaluationFunction;
-import ai.evaluation.SimpleSqrtEvaluationFunction2;
-import ai.mcts.naivemcts.NaiveMCTS;
-import ai.minimax.ABCD.ABCD;
-import ai.minimax.RTMiniMax.IDRTMinimax;
-import ai.minimax.RTMiniMax.RTMinimax;
-import ai.montecarlo.MonteCarlo;
-import ai.portfolio.PortfolioAI;
+import ai.abstraction.WorkerRush;
 import gui.PhysicalGameStatePanel;
-import java.io.OutputStreamWriter;
+import javafx.stage.Stage;
 import javax.swing.JFrame;
 import rts.GameState;
 import rts.PhysicalGameState;
 import rts.PlayerAction;
 import rts.units.UnitTypeTable;
-import util.XMLWriter;
 
 /**
  *
  * @author santi
  */
-public class GameVisualSimulationTest {
-    public static void main(String args[]) throws Exception {
+public class GameVisualSimulationTest extends Application {
+    public static void main(String args[])  throws Exception {
         UnitTypeTable utt = new UnitTypeTable();
         PhysicalGameState pgs = PhysicalGameState.load("maps/16x16/basesWorkers16x16.xml", utt);
 //        PhysicalGameState pgs = MapGenerator.basesWorkers8x8Obstacle();
@@ -45,7 +34,7 @@ public class GameVisualSimulationTest {
         
         AI ai1 = new AgentSmith(utt);
         //AI ai2 = new IDRTMinimax(100, new SimpleSqrtEvaluationFunction2());
-        AI ai2 = new PassiveAI(utt);
+        AI ai2 = new WorkerRush(utt);
 
         JFrame w = PhysicalGameStatePanel.newVisualizer(gs,640,640,false,PhysicalGameStatePanel.COLORSCHEME_BLACK);
 //        JFrame w = PhysicalGameStatePanel.newVisualizer(gs,640,640,false,PhysicalGameStatePanel.COLORSCHEME_WHITE);
@@ -75,4 +64,9 @@ public class GameVisualSimulationTest {
         
         System.out.println("Game Over");
     }    
+
+    @Override
+    public void start(Stage primaryStage) throws Exception {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }

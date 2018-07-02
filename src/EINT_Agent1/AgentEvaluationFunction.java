@@ -16,10 +16,11 @@ import rts.units.Unit;
  */
 public class AgentEvaluationFunction extends EvaluationFunction
 {
+    static int DEBUG = 1;
     static float GameOverBonus               = 100000.0f;
     static float ResourceMultiplier          = 20.0f;
     static float ResourcesInWorkerMultiplier = 10.0f;
-    static float NewUnitImportanceMultiplier = 1000.0f;
+    static float NewUnitImportanceMultiplier = 1500.0f;
     static float UnitHPMultiplier            = 40.0f;
     static float DistanceMultiplier          = 1200.0f;
     static float EnemyUnityCountMultiplier   = 15000.0f;
@@ -29,9 +30,9 @@ public class AgentEvaluationFunction extends EvaluationFunction
     {
         float Result = 0.0f;
         float Score1 = CalculateScore(MaxPlayer, GS);        
-        //float Score2 = CalculateScore(MinPlayer, GS);
+        /*float Score2 = CalculateScore(MinPlayer, GS);
         
-        /*if(Score1 + Score2 == 0.0f)
+        if(Score1 + Score2 == 0.0f)
         {
             Result = 0.5f;
         }
@@ -44,7 +45,7 @@ public class AgentEvaluationFunction extends EvaluationFunction
     
     private float CalculateScore(int Player, GameState GS)
     {
-        System.out.println("Player: "+Player);
+        if(DEBUG > 1) System.out.println("Player: "+Player);
         float Result = GS.getPlayer(Player).getResources()*ResourceMultiplier;
         PhysicalGameState PhysicalGS = GS.getPhysicalGameState();
         boolean AnyUnit = false;
@@ -61,7 +62,7 @@ public class AgentEvaluationFunction extends EvaluationFunction
                 EnemyUnitCount++;
             }
         }
-        //float NewUnitImportance = (1.0f/UnitCount)*NewUnitImportanceMultiplier;
+        float NewUnitImportance = (1.0f/UnitCount)*NewUnitImportanceMultiplier;
         for(Unit U : PhysicalGS.getUnits())
         {
             if(U.getPlayer() == Player)
@@ -90,27 +91,27 @@ public class AgentEvaluationFunction extends EvaluationFunction
                                 SmallestDistance = NewDist;
                                 NU = U2;
                             }
-                            System.out.println("\tType: "+U.getType().name+U.getID()+", POS: ("+UX+"/"+UY+")"+", "+"Dist: "+NewDist+", ENEMY "+U2.getType().name+": "+U2.getPosition(PhysicalGS)+"("+U2X+"/"+U2Y+")");
+                            if(DEBUG > 1) System.out.println("\tType: "+U.getType().name+U.getID()+", POS: ("+UX+"/"+UY+")"+", "+"Dist: "+NewDist+", ENEMY "+U2.getType().name+": "+U2.getPosition(PhysicalGS)+"("+U2X+"/"+U2Y+")");
                         }
                     }
                     if(SmallestDistance != 10000)
                     {
                         DistanceBonus = (1.0f/SmallestDistance)*DistanceMultiplier;
-                        System.out.println("ActualDistanceBonus: "+DistanceBonus + ", From: "+NU+", d: "+SmallestDistance);
+                        if(DEBUG > 1) System.out.println("ActualDistanceBonus: "+DistanceBonus + ", From: "+NU+", d: "+SmallestDistance);
                     }
                 }
-                float ResourceBonus = U.getResources()*ResourcesInWorkerMultiplier;//*NewUnitImportance;
+                float ResourceBonus = U.getResources()*ResourcesInWorkerMultiplier*NewUnitImportance;
                 float HitpointBonus = (float) (U.getCost()*Math.sqrt(U.getHitPoints()/U.getMaxHitPoints())*UnitHPMultiplier);
-                if(GameWon) 
+                if(GameWon)
                 {
                     Result += GameOverBonus;
                 }
                 Result += DistanceBonus + ResourceBonus + HitpointBonus;
-            }            
+            }
         }
         Result += (1.0f/EnemyUnitCount) * EnemyUnityCountMultiplier;
         if(!AnyUnit) Result = 0.0f;
-        System.out.println("Result: "+Result);
+        if(DEBUG > 0) System.out.println("Result: "+Result);
         return Result;
     }
 

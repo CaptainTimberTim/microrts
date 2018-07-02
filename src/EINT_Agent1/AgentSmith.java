@@ -31,6 +31,8 @@ import util.Pair;
  */
 public class AgentSmith extends AIWithComputationBudget implements InterruptibleAI
 {
+    static int DEBUG = 1;
+    
     Random RandomValues = new Random();
     public class PATableEntry
     {
@@ -170,11 +172,11 @@ public class AgentSmith extends AIWithComputationBudget implements Interruptible
         PlayerActionGenerator pag = new PlayerActionGenerator(gs,player);
         PlayerAction pa = null;
 
-        System.out.println("\n\n ------------------------------------");
+        if(DEBUG > 1) System.out.println("\n\n ------------------------------------");
         long GreedCycles = 0;
         long StartMillis = System.currentTimeMillis();
         PhysicalGameState PGS = gs.getPhysicalGameState();
-        System.out.println("PGS: h: "+PGS.getHeight()+", w: "+PGS.getWidth());
+        if(DEBUG > 1) System.out.println("PGS: h: "+PGS.getHeight()+", w: "+PGS.getWidth());
         do{
             GreedCycles++;
             pa = pag.getNextAction(cutOffTime);
@@ -189,11 +191,11 @@ public class AgentSmith extends AIWithComputationBudget implements Interruptible
                 
                 float score = EvalFunc.evaluate(player, 1 - player, gs2);
                 
-                System.out.println(pa.toString()+"\nScore: "+score);
+                if(DEBUG > 1) System.out.println(pa.toString()+"\nScore: "+score);
                 
                 if (best==null || score>bestScore) 
                 {
-                    System.out.println("******> NEW BEST: "+GreedCycles+"!!!! <********");
+                    if(DEBUG > 0) System.out.println("******> NEW BEST: "+GreedCycles+"!!!! <********");
                     best = pa;
                     bestScore = score; 
                 }                
@@ -205,8 +207,8 @@ public class AgentSmith extends AIWithComputationBudget implements Interruptible
             }
         }while(pa!=null);
                     
-        System.out.println("Greedy: "+ GreedCycles + ", Time: "+ (System.currentTimeMillis()-StartMillis)+"ms");
-        System.out.println("\n\n ------------------------------------");
+        if(DEBUG > 0) System.out.println("Greedy: "+ GreedCycles + ", Time: "+ (System.currentTimeMillis()-StartMillis)+"ms");
+        if(DEBUG > 0) System.out.println("\n\n ------------------------------------");
         return best;
     }
     
